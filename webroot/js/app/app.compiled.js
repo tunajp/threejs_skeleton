@@ -1,0 +1,331 @@
+System.register("config", [], function() {
+  "use strict";
+  var __moduleName = "config";
+  var _DEBUG_MODE_ = true;
+  var _FPS_ = 60;
+  var _ASSETS_PATH_ = "js/app/assets/";
+  return {
+    get _DEBUG_MODE_() {
+      return _DEBUG_MODE_;
+    },
+    get _FPS_() {
+      return _FPS_;
+    },
+    get _ASSETS_PATH_() {
+      return _ASSETS_PATH_;
+    }
+  };
+});
+System.register("util", [], function() {
+  "use strict";
+  var __moduleName = "util";
+  var PXConfig = System.get("config");
+  function trace_func(str) {
+    if (PXConfig._DEBUG_MODE_) {
+      var d = new Date();
+      var hh = d.getHours();
+      var mm = d.getMinutes();
+      var ss = d.getSeconds();
+      var dd = d.getMilliseconds();
+      var log_time = hh + ":" + mm + ":" + ss + ":" + dd;
+      console.log(log_time + " " + str);
+    }
+  }
+  function debug_board(str) {
+    'use strict';
+    if (PXConfig._DEBUG_MODE_) {
+      var d = new Date();
+      var hh = d.getHours();
+      var mm = d.getMinutes();
+      var ss = d.getSeconds();
+      var dd = d.getMilliseconds();
+      var log_time = hh + ":" + mm + ":" + ss + ":" + dd;
+      $('#debug_board').text(log_time + ' ' + str);
+    }
+  }
+  var Hoge = function Hoge() {};
+  ($traceurRuntime.createClass)(Hoge, {hoge: function(x) {
+      console.log('Hoge::hoge');
+    }}, {});
+  return {
+    get trace_func() {
+      return trace_func;
+    },
+    get debug_board() {
+      return debug_board;
+    },
+    get Hoge() {
+      return Hoge;
+    }
+  };
+});
+System.register("objects/debugbox", [], function() {
+  "use strict";
+  var __moduleName = "objects/debugbox";
+  var PXUtil = System.get("util");
+  var PXConfig = System.get("config");
+  var Debugbox = function Debugbox(callback_function) {
+    PXUtil.trace_func('Debugbox::constructor');
+    this.callback_function = callback_function;
+    this.mesh = new THREE.Mesh(new THREE.CubeGeometry(100, 100, 100), new THREE.MeshPhongMaterial({color: 0x00ff00}));
+    this.mesh.castShadow = true;
+    this.mesh.receiveShadow = true;
+    this.callback_function(this.mesh);
+  };
+  ($traceurRuntime.createClass)(Debugbox, {rendering: function(delta) {
+      this.mesh.rotation.y += delta;
+    }}, {});
+  return {get Debugbox() {
+      return Debugbox;
+    }};
+});
+System.register("objects/debugfloor", [], function() {
+  "use strict";
+  var __moduleName = "objects/debugfloor";
+  var PXUtil = System.get("util");
+  var PXConfig = System.get("config");
+  var Debugfloor = function Debugfloor(callback_function) {
+    PXUtil.trace_func('Debugbox::constructor');
+    this.callback_function = callback_function;
+    this.mesh = new THREE.Mesh(new THREE.PlaneGeometry(1000, 1000), new THREE.MeshPhongMaterial({color: 0xe0e0e0}));
+    this.mesh.rotation.x = Math.PI + Math.PI / 2;
+    this.mesh.receiveShadow = true;
+    this.callback_function(this.mesh);
+  };
+  ($traceurRuntime.createClass)(Debugfloor, {rendering: function(delta) {}}, {});
+  return {get Debugfloor() {
+      return Debugfloor;
+    }};
+});
+System.register("objects/shaderbox", [], function() {
+  "use strict";
+  var __moduleName = "objects/shaderbox";
+  var PXUtil = System.get("util");
+  var PXConfig = System.get("config");
+  var Shaderbox = function Shaderbox(myVertexShader1, myFragmentShader1, callback_function) {
+    PXUtil.trace_func('Shaderbox::constructor');
+    this.callback_function = callback_function;
+    var baseTexture = new THREE.ImageUtils.loadTexture(PXConfig._ASSETS_PATH_ + 'cover.png');
+    var sepia = true;
+    var sepia_value = false;
+    var grayscale_value = false;
+    if (sepia === true) {
+      sepia_value = true;
+    } else {
+      grayscale_value = true;
+    }
+    this.customUniforms = {
+      baseTexture: {
+        type: "t",
+        value: baseTexture
+      },
+      time: {
+        type: "f",
+        value: 1.0
+      },
+      grayscale: {
+        type: "i",
+        value: grayscale_value
+      },
+      sepia: {
+        type: "i",
+        value: sepia_value
+      }
+    };
+    var customMaterial = new THREE.ShaderMaterial({
+      uniforms: this.customUniforms,
+      vertexShader: myVertexShader1,
+      fragmentShader: myFragmentShader1
+    });
+    this.mesh = new THREE.Mesh(new THREE.CubeGeometry(100, 100, 100), customMaterial);
+    this.mesh.castShadow = true;
+    this.mesh.receiveShadow = true;
+    this.callback_function(this.mesh);
+  };
+  ($traceurRuntime.createClass)(Shaderbox, {rendering: function(delta) {
+      this.mesh.rotation.y += delta;
+      this.customUniforms.time.value += delta;
+    }}, {});
+  return {get Shaderbox() {
+      return Shaderbox;
+    }};
+});
+System.register("testscene", [], function() {
+  "use strict";
+  var __moduleName = "testscene";
+  var PXUtil = System.get("util");
+  var PXConfig = System.get("config");
+  var PXDebugbox = System.get("objects/debugbox");
+  var PXShaderbox = System.get("objects/shaderbox");
+  var PXDebugfloor = System.get("objects/debugfloor");
+  var _TEST_CONTROLLER_ = true;
+  var TestScene = function TestScene(renderer) {
+    PXUtil.trace_func('TestScene::constructor');
+    this.renderer;
+    this.scene;
+    this.camera;
+    this.light;
+    this.ambient;
+    this.all_items = 3;
+    this.loaded_items = 0;
+    this.render_target_array = new Array();
+    this.clock;
+    this.renderer = renderer;
+    this.scene = new THREE.Scene();
+    this.camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100000);
+    this.camera.position = new THREE.Vector3(0, 150, 500);
+    this.camera.aspect = window.innerWidth / window.innerHeight;
+    this.camera.updateProjectionMatrix();
+    this.light = new THREE.SpotLight(0xffffff);
+    this.light.position.set(100, 1000, 0);
+    this.light.angle = Math.PI / 4;
+    this.scene.add(this.light);
+    this.ambient = new THREE.AmbientLight(0x333333);
+    this.scene.add(this.ambient);
+    this.light.castShadow = true;
+    this.light.shadowMapWidth = 1024;
+    this.light.shadowMapHeight = 1024;
+    this.light.shadowCameraNear = 100;
+    this.light.shadowCameraFar = 1100;
+    this.light.shadowCameraFov = 30;
+    this.light.shadowCameraVisible = true;
+    this.renderer.shadowMapEnabled = true;
+    this.loadObjects();
+    if (_TEST_CONTROLLER_) {
+      this.trackball = new THREE.TrackballControls(this.camera);
+    }
+  };
+  ($traceurRuntime.createClass)(TestScene, {
+    getLoadingStatus: function() {
+      if (this.all_items === this.loaded_items || this.loading == false) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    loadedIncrements: function() {
+      this.loaded_items++;
+      if (this.loaded_items === this.all_items) {
+        this.loading = false;
+        this.clock = new THREE.Clock();
+      }
+    },
+    rendering: function() {
+      if (_TEST_CONTROLLER_) {
+        this.trackball.update();
+      }
+      var delta = this.clock.getDelta();
+      for (var i = 0; i < this.render_target_array.length; i++) {
+        this.render_target_array[i].rendering(delta);
+      }
+      this.renderer.render(this.scene, this.camera);
+    },
+    loadObjects: function() {
+      var $__4 = this;
+      var debugbox = new PXDebugbox.Debugbox((function(mesh) {
+        mesh.position.y += 70;
+        $__4.scene.add(mesh);
+        $__4.loadedIncrements();
+      }));
+      this.render_target_array.push(debugbox);
+      SHADER_LOADER.load((function(data) {
+        var myVertexShader1 = data.vertexShader.vertex;
+        var myFragmentShader1 = data.fragmentShader.fragment;
+        var shaderbox = new PXShaderbox.Shaderbox(myVertexShader1, myFragmentShader1, (function(mesh) {
+          mesh.position.y += 70;
+          mesh.position.x += 120;
+          $__4.scene.add(mesh);
+          $__4.loadedIncrements();
+        }));
+        $__4.render_target_array.push(shaderbox);
+      }));
+      var debugfloor = new PXDebugfloor.Debugfloor((function(mesh) {
+        $__4.scene.add(mesh);
+        $__4.loadedIncrements();
+      }));
+      this.render_target_array.push(debugfloor);
+    },
+    resize: function() {
+      PXUtil.trace_func('TestScene::resize');
+      this.camera.aspect = window.innerWidth / window.innerHeight;
+      this.camera.updateProjectionMatrix();
+    }
+  }, {});
+  return {get TestScene() {
+      return TestScene;
+    }};
+});
+System.register("app", [], function() {
+  "use strict";
+  var __moduleName = "app";
+  var PXUtil = System.get("util");
+  var PXConfig = System.get("config");
+  var PXScene = System.get("testscene");
+  var Application = function Application() {
+    PXUtil.trace_func('App::constructor');
+    this.renderer;
+    this.stats;
+    this.currentSceneObject;
+    this.renderer = Detector.webgl ? new THREE.WebGLRenderer({antialias: true}) : new THREE.CanvasRenderer();
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+    this.renderer.setSize(width, height);
+    this.renderer.setClearColor(0x00000, 1);
+    document.getElementById('canvas').appendChild(this.renderer.domElement);
+    this.stats = new Stats();
+    this.stats.domElement.style.position = 'absolute';
+    this.stats.domElement.style.top = '0px';
+    this.stats.domElement.style.zIndex = 100;
+    document.body.appendChild(this.stats.domElement);
+    if (PXConfig._DEBUG_MODE_) {
+      document.body.appendChild(this.stats.domElement);
+      $(document.body).append('<div id="debug_board" width="200" height="200">test<br>test2<br>test3<br></div');
+    }
+    this.currentSceneObject = new PXScene.TestScene(this.renderer);
+    this.resize();
+  };
+  ($traceurRuntime.createClass)(Application, {
+    run: function() {
+      PXUtil.trace_func('App::run');
+      this.update();
+    },
+    update: function() {
+      this.rendering();
+      this.stats.update();
+    },
+    rendering: function() {
+      var $__6 = this;
+      if (PXConfig._FPS_ === 60) {
+        requestAnimationFrame((function() {
+          $__6.update();
+        }));
+      } else {
+        setTimeout((function() {
+          requestAnimationFrame((function() {
+            $__6.update();
+          }));
+        }), 1000 / PXConfig._FPS_);
+      }
+      if (this.currentSceneObject.getLoadingStatus() === true) {
+        this.currentSceneObject.rendering();
+      }
+    },
+    resize: function() {
+      var $__6 = this;
+      PXUtil.trace_func('App::resize');
+      $(window).resize((function(e) {
+        var w = window.innerWidth;
+        var h = window.innerHeight;
+        PXUtil.trace_func('App::resize::resize w:' + w + ',h:' + h);
+        $__6.renderer.setSize(w, h);
+        $__6.currentSceneObject.resize();
+      }));
+    }
+  }, {});
+  $((function() {
+    var app = new Application();
+    app.run();
+  }));
+  return {};
+});
+System.get("app" + '');
