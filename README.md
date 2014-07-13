@@ -1,8 +1,10 @@
 ThreeJS MySkelton Project
 ======================
 description  
+[テストサイト](http://tunajp.github.io/threejs_skeleton/webroot/)
 
-使い方-----
+使い方(node.js)
+-----
 
 ###Build
 npm install  
@@ -20,3 +22,16 @@ node\_modules\\.bin\\node-inspector
 http://127.0.0.1:8080/debug?port=5858  
 
 ###Test
+
+
+使い方(PHP)
+-----
+
+###Build
+webroot配下を指定ディレクトリ直下にコピー  
+
+###Run
+http://localhost/指定ディレクトリ/にアクセスする
+
+###Test
+
