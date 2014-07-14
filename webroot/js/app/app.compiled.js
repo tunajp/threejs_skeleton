@@ -40,13 +40,75 @@ System.register("util", [], function() {
       var ss = d.getSeconds();
       var dd = d.getMilliseconds();
       var log_time = hh + ":" + mm + ":" + ss + ":" + dd;
-      $('#debug_board').text(log_time + ' ' + str);
+      $('#debug_board').html(log_time + ' ' + str);
     }
   }
   var Hoge = function Hoge() {};
   ($traceurRuntime.createClass)(Hoge, {hoge: function(x) {
       console.log('Hoge::hoge');
     }}, {});
+  function confirmDialog(message, title, buttonok, buttoncancel, response) {
+    var _dlg = $('<div>' + message + '</div>');
+    var _buttons = {};
+    _buttons[buttonok] = function() {
+      $(this).dialog('close');
+      response(false);
+      $(this).dialog('destroy');
+    };
+    _buttons[buttoncancel] = function() {
+      $(this).dialog('close');
+      response(true);
+      $(this).dialog('destroy');
+    };
+    _dlg.dialog({
+      modal: true,
+      draggable: true,
+      title: title,
+      height: 180,
+      width: 500,
+      buttons: _buttons,
+      open: function() {
+        var closeBtn = $('.ui-dialog-titlebar-close');
+        closeBtn.append('<span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span><span class="ui-button-text">close</span>');
+      },
+      overlay: {
+        opacity: 0.3,
+        background: "#225b7f"
+      }
+    });
+  }
+  function myDialog(message, title, buttonok, buttoncancel, response) {
+    var _dlg = $('<div>' + message + '</div>');
+    var _buttons = {};
+    _buttons[buttonok] = function() {
+      $(this).dialog('close');
+      response(false);
+      $(this).dialog('destroy');
+    };
+    _buttons[buttoncancel] = function() {
+      $(this).dialog('close');
+      response(true);
+      $(this).dialog('destroy');
+    };
+    _dlg.dialog({
+      modal: true,
+      draggable: true,
+      title: title,
+      width: 500,
+      buttons: _buttons,
+      open: function() {
+        var closeBtn = $('.ui-dialog-titlebar-close');
+        closeBtn.append('<span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span><span class="ui-button-text">close</span>');
+      },
+      overlay: {
+        opacity: 0.3,
+        background: "#225b7f"
+      }
+    });
+  }
+  function uuid(a) {
+    return a ? (a ^ Math.random() * 16 >> a / 4).toString(16) : ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, uuid);
+  }
   return {
     get trace_func() {
       return trace_func;
@@ -56,6 +118,15 @@ System.register("util", [], function() {
     },
     get Hoge() {
       return Hoge;
+    },
+    get confirmDialog() {
+      return confirmDialog;
+    },
+    get myDialog() {
+      return myDialog;
+    },
+    get uuid() {
+      return uuid;
     }
   };
 });
@@ -67,7 +138,7 @@ System.register("objects/debugbox", [], function() {
   var Debugbox = function Debugbox(callback_function) {
     PXUtil.trace_func('Debugbox::constructor');
     this.callback_function = callback_function;
-    this.mesh = new THREE.Mesh(new THREE.CubeGeometry(100, 100, 100), new THREE.MeshPhongMaterial({color: 0x00ff00}));
+    this.mesh = new THREE.Mesh(new THREE.BoxGeometry(100, 100, 100), new THREE.MeshPhongMaterial({color: 0x00ff00}));
     this.mesh.castShadow = true;
     this.mesh.receiveShadow = true;
     this.callback_function(this.mesh);
@@ -137,7 +208,7 @@ System.register("objects/shaderbox", [], function() {
       vertexShader: myVertexShader1,
       fragmentShader: myFragmentShader1
     });
-    this.mesh = new THREE.Mesh(new THREE.CubeGeometry(100, 100, 100), customMaterial);
+    this.mesh = new THREE.Mesh(new THREE.BoxGeometry(100, 100, 100), customMaterial);
     this.mesh.castShadow = true;
     this.mesh.receiveShadow = true;
     this.callback_function(this.mesh);
