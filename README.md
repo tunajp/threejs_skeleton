@@ -3,6 +3,13 @@ ThreeJS MySkelton Project
 description  
 [テストサイト](http://tunajp.github.io/threejs_skeleton/webroot/)
 
+ビルドに必要なもの
+-----
+ruby:http://rubyinstaller.org/downloads/  
+sass:gem install sass  
+compass:gem install compass --pre  
+node.js:http://nodejs.org/  
+
 使い方(node.js)
 -----
 
@@ -24,7 +31,7 @@ http://127.0.0.1:8080/debug?port=5858
 ###Test
 
 
-使い方(PHP)
+使い方(PHP etc)
 -----
 
 ###Build
