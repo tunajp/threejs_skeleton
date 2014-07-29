@@ -43,6 +43,27 @@ System.register("util", [], function() {
       $('#debug_board').html(log_time + ' ' + str);
     }
   }
+  function graphics_card_info(renderer) {
+    var gl = renderer.context;
+    var gl_info = {
+      "Version": gl.getParameter(gl.VERSION),
+      "Shading language": gl.getParameter(gl.SHADING_LANGUAGE_VERSION),
+      "Vendor": gl.getParameter(gl.VENDOR),
+      "Renderer": gl.getParameter(gl.RENDERER),
+      "Max varying vectors": gl.getParameter(gl.MAX_VARYING_VECTORS),
+      "Max vertex attribs": gl.getParameter(gl.MAX_VERTEX_ATTRIBS),
+      "Max vertex uniform vectors": gl.getParameter(gl.MAX_VERTEX_UNIFORM_VECTORS),
+      "Max fragment uniform vectors": gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS),
+      "Max renderbuffer size": gl.getParameter(gl.MAX_RENDERBUFFER_SIZE),
+      "Max texture size": gl.getParameter(gl.MAX_TEXTURE_SIZE),
+      "Max cube map texture size": gl.getParameter(gl.MAX_CUBE_MAP_TEXTURE_SIZE),
+      "Max texture image units": gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS),
+      "Max vertex texture units": gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS),
+      "Max combined texture units": gl.getParameter(gl.MAX_COMBINED_TEXTURE_IMAGE_UNITS),
+      "Max viewport dims": gl.getParameter(gl.MAX_VIEWPORT_DIMS)[0] + "x" + gl.getParameter(gl.MAX_VIEWPORT_DIMS)[1]
+    };
+    console.log("WebGL info: ", gl_info);
+  }
   var Hoge = function Hoge() {};
   ($traceurRuntime.createClass)(Hoge, {hoge: function(x) {
       console.log('Hoge::hoge');
@@ -127,6 +148,9 @@ System.register("util", [], function() {
     },
     get debug_board() {
       return debug_board;
+    },
+    get graphics_card_info() {
+      return graphics_card_info;
     },
     get Hoge() {
       return Hoge;
@@ -353,6 +377,9 @@ System.register("app", [], function() {
     this.stats;
     this.currentSceneObject;
     this.renderer = Detector.webgl ? new THREE.WebGLRenderer({antialias: true}) : new THREE.CanvasRenderer();
+    if (Detector.webgl) {
+      PXUtil.graphics_card_info(this.renderer);
+    }
     var width = window.innerWidth;
     var height = window.innerHeight;
     this.renderer.setSize(width, height);
