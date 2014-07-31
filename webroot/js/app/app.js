@@ -122,7 +122,7 @@ class Application
     $(window).resize( (e) => {
       var w = window.innerWidth;
       var h = window.innerHeight;
-      PXUtil.trace_func('App::resize::resize w:' + w + ',h:' + h);
+      PXUtil.trace_func('App::resize::resize w:' + w + ',h:' + h + ",e:" + e);
 
       this.renderer.setSize(w, h);
       this.currentSceneObject.resize();

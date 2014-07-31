@@ -97,7 +97,7 @@ export class Hoge{
    */
   hoge(x)
   {
-    console.log('Hoge::hoge');
+    console.log('Hoge::hoge ' + x);
   }
 }
 

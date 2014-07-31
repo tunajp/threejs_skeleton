@@ -43,7 +43,7 @@ System.register("util", [], function() {
       $('#debug_board').html(log_time + ' ' + str);
     }
   }
-  function graphics_card_info(renderer) {
+  function webgl_info(renderer) {
     var gl = renderer.context;
     var gl_info = {
       "Version": gl.getParameter(gl.VERSION),
@@ -64,9 +64,16 @@ System.register("util", [], function() {
     };
     console.log("WebGL info: ", gl_info);
   }
+  function screenshot(dontDownload, useJPG) {
+    var imgtype = useJPG ? "image/jpeg" : "image/png";
+    var dataUrl = renderer.domElement.toDataURL(imgtype);
+    if (!dontDownload)
+      dataUrl = dataUrl.replace(imgtype, "image/octet-stream");
+    window.open(dataUrl, "_blank");
+  }
   var Hoge = function Hoge() {};
   ($traceurRuntime.createClass)(Hoge, {hoge: function(x) {
-      console.log('Hoge::hoge');
+      console.log('Hoge::hoge ' + x);
     }}, {});
   function confirmDialog(message, title, buttonok, buttoncancel, response) {
     var _dlg = $('<div>' + message + '</div>');
@@ -149,8 +156,11 @@ System.register("util", [], function() {
     get debug_board() {
       return debug_board;
     },
-    get graphics_card_info() {
-      return graphics_card_info;
+    get webgl_info() {
+      return webgl_info;
+    },
+    get screenshot() {
+      return screenshot;
     },
     get Hoge() {
       return Hoge;
@@ -328,6 +338,7 @@ System.register("testscene", [], function() {
       for (var i = 0; i < this.render_target_array.length; i++) {
         this.render_target_array[i].rendering(delta);
       }
+      PXUtil.debug_board('delta: ' + Math.floor(delta * 100000) / 100000 + '<br>' + 'info.memory.programs:' + this.renderer.info.memory.programs + '<br>' + 'info.memory.geometries:' + this.renderer.info.memory.geometries + '<br>' + 'info.memory.textures:' + this.renderer.info.memory.textures + '<br>' + 'info.render.calls:' + this.renderer.info.render.calls + '<br>' + 'info.render.vertices:' + this.renderer.info.render.vertices + '<br>' + 'info.render.faces:' + this.renderer.info.render.faces + '<br>' + 'info.render.points:' + this.renderer.info.render.points);
       this.renderer.render(this.scene, this.camera);
     },
     loadObjects: function() {
@@ -378,8 +389,8 @@ System.register("app", [], function() {
     this.currentSceneObject;
     this.renderer = Detector.webgl ? new THREE.WebGLRenderer({antialias: true}) : new THREE.CanvasRenderer();
     if (Detector.webgl) {
-      PXUtil.graphics_card_info(this.renderer);
-    }
+      PXUtil.webgl_info(this.renderer);
+    } else {}
     var width = window.innerWidth;
     var height = window.innerHeight;
     this.renderer.setSize(width, height);
@@ -429,7 +440,7 @@ System.register("app", [], function() {
       $(window).resize((function(e) {
         var w = window.innerWidth;
         var h = window.innerHeight;
-        PXUtil.trace_func('App::resize::resize w:' + w + ',h:' + h);
+        PXUtil.trace_func('App::resize::resize w:' + w + ',h:' + h + ",e:" + e);
         $__6.renderer.setSize(w, h);
         $__6.currentSceneObject.resize();
       }));
