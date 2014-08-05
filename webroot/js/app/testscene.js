@@ -4,11 +4,11 @@
  * @author Mitsunori Inaba <m-inaba@phoenixdesign.jp>
  */
 
-module PXUtil from './util';
-module PXConfig from './config';
-module PXDebugbox from './objects/debugbox';
-module PXShaderbox from './objects/shaderbox';
-module PXDebugfloor from './objects/debugfloor';
+import * as PXUtil from './util';
+import * as PXConfig from './config';
+import * as PXDebugbox from './objects/debugbox';
+import * as PXShaderbox from './objects/shaderbox';
+import * as PXDebugfloor from './objects/debugfloor';
 
 var _TEST_CONTROLLER_ = true;
 
