@@ -2898,13 +2898,16 @@ System.registerModule("../../src/util", [], function() {
   function trace_func(str) {
     if (PXConfig._DEBUG_MODE_) {
       var d = new Date();
-      var hh = d.getHours();
-      var mm = d.getMinutes();
-      var ss = d.getSeconds();
-      var dd = d.getMilliseconds();
+      var hh = pad(d.getHours());
+      var mm = pad(d.getMinutes());
+      var ss = pad(d.getSeconds());
+      var dd = pad(d.getMilliseconds());
       var log_time = hh + ":" + mm + ":" + ss + ":" + dd;
       console.log(log_time + " " + str);
     }
+  }
+  function pad(n) {
+    return ("0" + n).slice(-2);
   }
   function debug_board(str) {
     'use strict';
