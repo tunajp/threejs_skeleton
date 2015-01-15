@@ -2,6 +2,7 @@
 #webroot/js/app/app.compiled.js
 #webroot/js/app/app.compiled.min.js
 node_modules
+webroot/css/style.min.css.map
 tmp/.sass-cache
 tmp/server/
 tmp/client/
