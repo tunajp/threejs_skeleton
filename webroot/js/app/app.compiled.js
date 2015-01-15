@@ -1,4 +1,4 @@
-System.register("config", [], function() {
+System.registerModule("config", [], function() {
   "use strict";
   var __moduleName = "config";
   var _DEBUG_MODE_ = true;
@@ -16,7 +16,7 @@ System.register("config", [], function() {
     }
   };
 });
-System.register("util", [], function() {
+System.registerModule("util", [], function() {
   "use strict";
   var __moduleName = "util";
   var PXConfig = System.get("config");
@@ -179,7 +179,7 @@ System.register("util", [], function() {
     }
   };
 });
-System.register("objects/debugbox", [], function() {
+System.registerModule("objects/debugbox", [], function() {
   "use strict";
   var __moduleName = "objects/debugbox";
   var PXUtil = System.get("util");
@@ -199,7 +199,7 @@ System.register("objects/debugbox", [], function() {
       return Debugbox;
     }};
 });
-System.register("objects/debugfloor", [], function() {
+System.registerModule("objects/debugfloor", [], function() {
   "use strict";
   var __moduleName = "objects/debugfloor";
   var PXUtil = System.get("util");
@@ -217,7 +217,7 @@ System.register("objects/debugfloor", [], function() {
       return Debugfloor;
     }};
 });
-System.register("objects/shaderbox", [], function() {
+System.registerModule("objects/shaderbox", [], function() {
   "use strict";
   var __moduleName = "objects/shaderbox";
   var PXUtil = System.get("util");
@@ -225,7 +225,7 @@ System.register("objects/shaderbox", [], function() {
   var Shaderbox = function Shaderbox(myVertexShader1, myFragmentShader1, callback_function) {
     PXUtil.trace_func('Shaderbox::constructor');
     this.callback_function = callback_function;
-    var baseTexture = new THREE.ImageUtils.loadTexture(PXConfig._ASSETS_PATH_ + 'cover.png');
+    var baseTexture = new THREE.ImageUtils.loadTexture(PXConfig._ASSETS_PATH_ + 'Three.js-code-example.jpg');
     var sepia = true;
     var sepia_value = false;
     var grayscale_value = false;
@@ -270,7 +270,7 @@ System.register("objects/shaderbox", [], function() {
       return Shaderbox;
     }};
 });
-System.register("testscene", [], function() {
+System.registerModule("testscene", [], function() {
   "use strict";
   var __moduleName = "testscene";
   var PXUtil = System.get("util");
@@ -342,11 +342,11 @@ System.register("testscene", [], function() {
       this.renderer.render(this.scene, this.camera);
     },
     loadObjects: function() {
-      var $__4 = this;
+      var $__0 = this;
       var debugbox = new PXDebugbox.Debugbox((function(mesh) {
         mesh.position.y += 70;
-        $__4.scene.add(mesh);
-        $__4.loadedIncrements();
+        $__0.scene.add(mesh);
+        $__0.loadedIncrements();
       }));
       this.render_target_array.push(debugbox);
       SHADER_LOADER.load((function(data) {
@@ -355,14 +355,14 @@ System.register("testscene", [], function() {
         var shaderbox = new PXShaderbox.Shaderbox(myVertexShader1, myFragmentShader1, (function(mesh) {
           mesh.position.y += 70;
           mesh.position.x += 120;
-          $__4.scene.add(mesh);
-          $__4.loadedIncrements();
+          $__0.scene.add(mesh);
+          $__0.loadedIncrements();
         }));
-        $__4.render_target_array.push(shaderbox);
+        $__0.render_target_array.push(shaderbox);
       }));
       var debugfloor = new PXDebugfloor.Debugfloor((function(mesh) {
-        $__4.scene.add(mesh);
-        $__4.loadedIncrements();
+        $__0.scene.add(mesh);
+        $__0.loadedIncrements();
       }));
       this.render_target_array.push(debugfloor);
     },
@@ -376,9 +376,9 @@ System.register("testscene", [], function() {
       return TestScene;
     }};
 });
-System.register("app", [], function() {
+System.registerModule("app.js", [], function() {
   "use strict";
-  var __moduleName = "app";
+  var __moduleName = "app.js";
   var PXUtil = System.get("util");
   var PXConfig = System.get("config");
   var PXScene = System.get("testscene");
@@ -418,15 +418,15 @@ System.register("app", [], function() {
       this.stats.update();
     },
     rendering: function() {
-      var $__6 = this;
+      var $__0 = this;
       if (PXConfig._FPS_ === 60) {
         requestAnimationFrame((function() {
-          $__6.update();
+          $__0.update();
         }));
       } else {
         setTimeout((function() {
           requestAnimationFrame((function() {
-            $__6.update();
+            $__0.update();
           }));
         }), 1000 / PXConfig._FPS_);
       }
@@ -435,14 +435,14 @@ System.register("app", [], function() {
       }
     },
     resize: function() {
-      var $__6 = this;
+      var $__0 = this;
       PXUtil.trace_func('App::resize');
       $(window).resize((function(e) {
         var w = window.innerWidth;
         var h = window.innerHeight;
         PXUtil.trace_func('App::resize::resize w:' + w + ',h:' + h + ",e:" + e);
-        $__6.renderer.setSize(w, h);
-        $__6.currentSceneObject.resize();
+        $__0.renderer.setSize(w, h);
+        $__0.currentSceneObject.resize();
       }));
     }
   }, {});
@@ -455,4 +455,4 @@ System.register("app", [], function() {
   }));
   return {};
 });
-System.get("app" + '');
+System.get("app.js" + '');

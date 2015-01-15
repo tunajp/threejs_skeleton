@@ -15,7 +15,7 @@ node.js:http://nodejs.org/
 
 ###Build
 npm install  
-build.cmd  
+gulp  
 
 ###Run
 node bin\Application.js  

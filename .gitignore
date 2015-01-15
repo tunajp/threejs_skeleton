@@ -1,2 +1,7 @@
+#bin/application.js
+#webroot/js/app/app.compiled.js
+#webroot/js/app/app.compiled.min.js
 node_modules
 tmp/.sass-cache
+tmp/server/
+tmp/client/
