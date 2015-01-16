@@ -1,5 +1,5 @@
 /*
- * guilpfile.js
+ * gulpfile.js
  *
  * Windows:
  * node_modules\.bin\gulp
