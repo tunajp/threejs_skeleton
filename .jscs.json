@@ -1,0 +1,32 @@
+
+{
+  "excludeFiles": ["webroot/js/app/app.compiled.js", "webroot/js/app/edit_patrol.compiled.js"],
+
+  "validateIndentation": 2,
+  "disallowKeywords": ["with"],
+  "disallowMixedSpacesAndTabs": true,
+  "disallowMultipleLineStrings": true,
+  "disallowSpaceAfterObjectKeys": true,
+  "disallowSpaceAfterPrefixUnaryOperators": ["!"],
+  "disallowSpaceBeforeBinaryOperators": [","],
+  "disallowSpacesInsideParentheses": true,
+  "disallowTrailingComma": true,
+  "disallowTrailingWhitespace": true,
+  "requireSpaceAfterKeywords": ["if", "else", "for", "while", "do", "switch", "return", "try", "catch"],
+  "requireSpacesInFunction": {
+    "beforeOpeningCurlyBrace": true
+  },
+
+  "validateParameterSeparator": ", ",
+  "requireCurlyBraces": ["if", "else", "for", "while", "do", "try", "catch"],
+  "requireSpaceAfterBinaryOperators": ["?", ":", "+", "-", "/", "*", "%", "==", "===", "!=", "!==", ">", ">=", "<", "<=", "&&", "||"],
+  "requireSpaceBeforeBinaryOperators": ["?", ":", "+", "-", "/", "*", "%", "==", "===", "!=", "!==", ">", ">=", "<", "<=", "&&", "||"],
+  "disallowImplicitTypeConversion": ["string"],
+  "disallowMultipleLineBreaks": true,
+  "disallowKeywordsOnNewLine": ["else"],
+  "requireLineFeedAtFileEnd": true,
+  "validateJSDoc": {
+    "checkParamNames": true,
+    "requireParamTypes": true
+  }
+}

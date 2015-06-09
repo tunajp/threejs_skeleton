@@ -17,7 +17,7 @@ export class Debugfloor
    */
   constructor(callback_function)
   {
-    PXUtil.trace_func('Debugbox::constructor');
+    PXUtil.Util.trace_func('Debugfloor::constructor');
 
     this.callback_function = callback_function;
 

@@ -1,236 +1,184 @@
 /*
  * util.js
- * 
+ *
  * @author Mitsunori Inaba <m-inaba@phoenixdesign.jp>
+ * Copyright(C) 2015 DesignStudioPhoenix Corporation. All Rigths Reserved.
  */
 
 import * as PXConfig from './config.js';
 
 /**
- * debug_board デバッグ板に文字列を出力する
- * @param {string} str
+ * Utility class
  */
-export function trace_func(str)
+export class Util
 {
-  if (PXConfig._DEBUG_MODE_) {
-    var d = new Date();
-    var hh = pad(d.getHours());
-    var mm = pad(d.getMinutes());
-    var ss = pad(d.getSeconds());
-    var dd = pad(d.getMilliseconds());
-    var log_time = hh + ":" + mm + ":" + ss + ":" + dd;
-    console.log(log_time + " " + str);
-  }
-}
-function pad(n) { return ("0" + n).slice(-2); }
-
-/**
- * debug_board デバッグ板に文字列を出力する
- * @param {string} str
- */
-export function debug_board(str)
-{
-  'use strict';
-  if (PXConfig._DEBUG_MODE_) {
-    var d = new Date();
-    var hh = pad(d.getHours());
-    var mm = pad(d.getMinutes());
-    var ss = pad(d.getSeconds());
-    var dd = pad(d.getMilliseconds());
-    var log_time = hh + ":" + mm + ":" + ss + ":" + dd;
-    //$('#debug_board').text(log_time + ' ' + str);
-    $('#debug_board').html(log_time + ' ' + str);
-  }
-}
-
-/**
- * WebGL Info(https://github.com/tapio/plasma-forks/blob/master/js/utils.js)
- */
-export function webgl_info(renderer)
-{
-  var gl = renderer.context;
-  var gl_info = {
-    "Version": gl.getParameter(gl.VERSION),
-    "Shading language": gl.getParameter(gl.SHADING_LANGUAGE_VERSION),
-    "Vendor": gl.getParameter(gl.VENDOR),
-    "Renderer": gl.getParameter(gl.RENDERER),
-    "Max varying vectors": gl.getParameter(gl.MAX_VARYING_VECTORS),
-    "Max vertex attribs": gl.getParameter(gl.MAX_VERTEX_ATTRIBS),
-    "Max vertex uniform vectors": gl.getParameter(gl.MAX_VERTEX_UNIFORM_VECTORS),
-    "Max fragment uniform vectors": gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS),
-    "Max renderbuffer size": gl.getParameter(gl.MAX_RENDERBUFFER_SIZE),
-    "Max texture size": gl.getParameter(gl.MAX_TEXTURE_SIZE),
-    "Max cube map texture size": gl.getParameter(gl.MAX_CUBE_MAP_TEXTURE_SIZE),
-    "Max texture image units": gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS),
-    "Max vertex texture units": gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS),
-    "Max combined texture units": gl.getParameter(gl.MAX_COMBINED_TEXTURE_IMAGE_UNITS),
-    "Max viewport dims": gl.getParameter(gl.MAX_VIEWPORT_DIMS)[0] + "x" + gl.getParameter(gl.MAX_VIEWPORT_DIMS)[1]
-  };
-	console.log("WebGL info: ", gl_info);
-}
-
-/**
- * screenshot(https://github.com/tapio/plasma-forks/blob/master/js/utils.js)
- */
-export function screenshot(dontDownload, useJPG) {
-  var imgtype = useJPG ? "image/jpeg" : "image/png";
-  var dataUrl = renderer.domElement.toDataURL(imgtype);
-  if (!dontDownload) dataUrl = dataUrl.replace(imgtype, "image/octet-stream");
-  window.open(dataUrl, "_blank");
-}
-
-/**
- * Hoge class
- */
-export class Hoge{
   /**
-   * constructor
+   * trace_func method
+   * print out console.log with current time
+   *
+   * @param {string} str message
    */
-  constructor()
+  static trace_func(str)
   {
+    if (PXConfig._DEBUG_MODE_) {
+      let log_time = this.getCurrentTimeString();
+      console.log(log_time + " " + str);
+    }
   }
-  
+
   /**
-   * hoge method
-   * @argument {int} x description
+   * createDebugBoard method
    */
-  hoge(x)
+  static createDebugBoard()
   {
-    console.log('Hoge::hoge ' + x);
+    if (PXConfig._DEBUG_MODE_) {
+      this.domElement = document.createElement('div');
+      this.domElement.id = 'debug_board';
+
+      document.body.appendChild(this.domElement);
+    }
   }
-}
 
-/**
- * 確認ダイアログ(http://tilfin.hatenablog.com/entry/20080616/1213695611)
- *
- * message      : ダイアログのメッセージ本文
- * title        : ダイアログのタイトル
- * buttonok     : OKボタンのテキスト
- * buttoncancel : キャンセルボタンのテキスト
- * response     : コールバック関数を指定する。引数 cancel にボタン選択の結果が入る。
- *                OK ならば false キャンセルならば true となる。
- * サンプル:
- * confirmDialog('この処理を続行しますか？', '確認', 'OK', 'キャンセル', function(cancel){
- *   if (cancel) return;
- *   処理を書く
- *   });
- */
-export function confirmDialog(message, title, buttonok, buttoncancel, response)
-{
-  var _dlg = $('<div>' + message + '</div>');
-  var _buttons = {};
-  _buttons[buttonok] = function(){
-    $(this).dialog('close');
-    response(false)
-    $(this).dialog('destroy');
-  };
-  _buttons[buttoncancel] = function(){
-    $(this).dialog('close');
-    response(true)
-    $(this).dialog('destroy');
-  };
-  
-  _dlg.dialog({
-    modal: true,
-    draggable: true,
-    title: title,
-    height:180,
-    width: 500,
-    buttons:_buttons,
-    // http://stackoverflow.com/questions/8681707/jqueryui-modal-dialog-does-not-show-close-button-x
-    open: function(){
-        var closeBtn = $('.ui-dialog-titlebar-close');
-        closeBtn.append('<span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span><span class="ui-button-text">close</span>');
-    },
-    overlay: {opacity:0.3, background: "#225b7f"}
-  });
-}
+  /**
+   * debug_board method
+   * print out for DEBUG BOARD with current time
+   *
+   * @param {string} str message
+   */
+  static debug(str)
+  {
+    if (PXConfig._DEBUG_MODE_) {
+      //console.warn('deprecated: use Logger');
+      let log_time = this.getCurrentTimeString();
+      document.querySelector('#debug_board').innerHTML = log_time + " " + str;
+    }
+  }
 
-/**
- * ダイアログ(http://tilfin.hatenablog.com/entry/20080616/1213695611)
- *
- * message      : ダイアログのメッセージ本文
- * title        : ダイアログのタイトル
- * buttonok     : OKボタンのテキスト
- * buttoncancel : キャンセルボタンのテキスト
- * response     : コールバック関数を指定する。引数 cancel にボタン選択の結果が入る。
- *                OK ならば false キャンセルならば true となる。
- * サンプル:
- * confirmDialog('この処理を続行しますか？', '確認', 'OK', 'キャンセル', function(cancel){
- *   if (cancel) return;
- *   処理を書く
- *   });
- */
-export function myDialog(message, title, buttonok, buttoncancel, response)
-{
-  var _dlg = $('<div>' + message + '</div>');
-  var _buttons = {};
-  _buttons[buttonok] = function(){
-    $(this).dialog('close');
-    response(false)
-    $(this).dialog('destroy');
-  };
-  _buttons[buttoncancel] = function(){
-    $(this).dialog('close');
-    response(true)
-    $(this).dialog('destroy');
-  };
-  
-  _dlg.dialog({
-    modal: true,
-    draggable: true,
-    title: title,
-    //height:180,
-    width: 500,
-    buttons:_buttons,
-    // http://stackoverflow.com/questions/8681707/jqueryui-modal-dialog-does-not-show-close-button-x
-    open: function(){
-        var closeBtn = $('.ui-dialog-titlebar-close');
-        closeBtn.append('<span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span><span class="ui-button-text">close</span>');
-    },
-    overlay: {opacity:0.3, background: "#225b7f"}
-  });
-  //tinymce.init({selector:'textarea'});
-}
+  /**
+   * getCurrentTimeString method
+   * get current time string
+   *
+   * @return {string} current time string
+   */
+  static getCurrentTimeString()
+  {
+    let d = new Date();
+    let hh = this.pad(d.getHours());
+    let mm = this.pad(d.getMinutes());
+    let ss = this.pad(d.getSeconds());
+    let ddd = this.pad(d.getMilliseconds(), 3);
+    let log_time = hh + ":" + mm + ":" + ss + ":" + ddd;
+    return log_time;
+  }
 
-/**
- * uuid
- * makeUUID
- * @param a placeholder
- *
- * https://gist.github.com/jed/982883
- */
-export function uuid(a)
-{
-  return a           // if the placeholder was passed, return
-    ? (              // a random number from 0 to 15
-      a ^            // unless b is 8,
-      Math.random()  // in which case
-      * 16           // a random number from
-      >> a/4         // 8 to 11
-      ).toString(16) // in hexadecimal
-    : (              // or otherwise a concatenated string:
-      [1e7] +        // 10000000 +
-      -1e3 +         // -1000 +
-      -4e3 +         // -4000 +
-      -8e3 +         // -80000000 +
-      -1e11          // -100000000000,
-      ).replace(     // replacing
-        /[018]/g,    // zeroes, ones, and eights with
-        uuid            // random hex digits
-      );
-}
+  /**
+   * pad method
+   * ゼロ埋め(必ず2桁になる)
+   *
+   * @param {any} n 0埋めする文字列
+   * @return {string} 0埋めされた文字列
+   */
+  static pad(n, digit = 2)
+  {
+    if (n == null || n.length == 0) {
+      n = '0';
+    }
+    if (digit == 3) {
+      return ("00" + n).slice(-3);
+    } else {
+      return ("0" + n).slice(-2);
+    }
+  }
 
-export function i18nLoad(callback_function)
-{
-  $.i18n.init({
-    //lng: 'en-US',
-    ns: { namespaces: ['ns.special'], defaultNs: 'ns.special'},
-    useLocalStorage: false,
-    debug: true
-  }, function() {
-    //var name = $.i18n.t('app.name');
-    //$('#name').text(name);
-    callback_function();
-  });
+  /**
+   * Get GPUCard's WebGL spec Info
+   *
+   * @param {THREE.WebGLRenderer} renderer Renderer
+   */
+  static webglInfo(renderer)
+  {
+    if (renderer == null) {
+      throw "THREE.WebGLRenderer is null object";
+    }
+    let gl = renderer.context;
+    let gl_info = {
+      "Version": gl.getParameter(gl.VERSION),
+      "Shading language": gl.getParameter(gl.SHADING_LANGUAGE_VERSION),
+      "Vendor": gl.getParameter(gl.VENDOR),
+      "Renderer": gl.getParameter(gl.RENDERER),
+      "Max varying vectors": gl.getParameter(gl.MAX_VARYING_VECTORS),
+      "Max vertex attribs": gl.getParameter(gl.MAX_VERTEX_ATTRIBS),
+      "Max vertex uniform vectors": gl.getParameter(gl.MAX_VERTEX_UNIFORM_VECTORS),
+      "Max fragment uniform vectors": gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS),
+      "Max renderbuffer size": gl.getParameter(gl.MAX_RENDERBUFFER_SIZE),
+      "Max texture size": gl.getParameter(gl.MAX_TEXTURE_SIZE),
+      "Max cube map texture size": gl.getParameter(gl.MAX_CUBE_MAP_TEXTURE_SIZE),
+      "Max texture image units": gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS),
+      "Max vertex texture units": gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS),
+      "Max combined texture units": gl.getParameter(gl.MAX_COMBINED_TEXTURE_IMAGE_UNITS),
+      "Max viewport dims": gl.getParameter(gl.MAX_VIEWPORT_DIMS)[0] + "x" + gl.getParameter(gl.MAX_VIEWPORT_DIMS)[1]
+    };
+    console.log('WebGL info: ', gl_info);
+    return gl_info;
+  }
+
+  /**
+   * Get Screen Width and Height
+   *
+   * @return {json} width,height
+   */
+  static getWH()
+  {
+    return {
+      width: window.innerWidth,
+      height: window.innerHeight
+    };
+  }
+
+  /**
+   * i18n
+   *
+   * @param {any} cb コールバック関数
+   */
+  static i18nLoad(cb)
+  {
+    i18n.init({
+      //lng: 'en-US',
+      ns: { namespaces: ['ns.special'], defaultNs: 'ns.special'},
+      useLocalStorage: false,
+      debug: true
+    }, () => {
+      //var name = i18n.t('app.name');
+      //$('#name').text(name);
+      cb();
+    });
+  }
+
+  /**
+   * screenshot
+   * https://github.com/tapio/plasma-forks/blob/master/js/utils.js
+   *
+   * @param {bool} dontDownload
+   * @param {bool} useJPG
+   */
+  static screenshot(dontDownload, useJPG) {
+    var imgtype = useJPG ? "image/jpeg" : "image/png";
+    var dataUrl = renderer.domElement.toDataURL(imgtype);
+    if (!dontDownload) {
+      dataUrl = dataUrl.replace(imgtype, "image/octet-stream");
+    }
+    window.open(dataUrl, "_blank");
+  }
+
+  /**
+   * uuid
+   * makeUUID(https://gist.github.com/jed/982883)
+   *
+   * @param a placeholder
+   * @return unique uuid(v4)
+   */
+  static uuid()
+  {
+    return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, a=>(a ^ Math.random() * 16 >> a / 4).toString(16));
+  }
 }

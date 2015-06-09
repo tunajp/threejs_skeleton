@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="server_watch" default="build">
+ <target name="build" depends="jscs-ci-server, jscs-ci-client, ci-unittest, ci-e2etest"/>
+
+ <target name="jscs-ci-server"
+         description="Find coding standard violations using JS_CodeSniffer and print human readable output.">
+   <exec executable="node_modules/.bin/jscs">
+   <arg value="--esnext" />
+   <arg value="--reporter=checkstyle" />
+   <arg path="${basedir}/src" />
+  </exec>
+ </target>
+
+ <target name="jscs-ci-client"
+         description="Find coding standard violations using JS_CodeSniffer and print human readable output.">
+   <exec executable="node_modules/.bin/jscs">
+   <arg value="--esnext" />
+   <arg value="--reporter=checkstyle" />
+   <arg path="${basedir}/webroot/js/app" />
+  </exec>
+ </target>
+
+ <target name="ci-unittest"
+         description="UnitTest.">
+   <exec executable="node_modules/.bin/mocha">
+   <arg value="./test/*" />
+   <arg value="--compilers" />
+   <arg value="js:mocha-traceur" />
+   <arg value="--reporter" />
+   <arg value="xunit" />
+  </exec>
+ </target>
+
+ <target name="ci-e2etest"
+         description="E2ETest.">
+   <exec executable="node_modules/.bin/mocha">
+   <arg value="./e2e_test/*" />
+   <arg value="--compilers" />
+   <arg value="js:mocha-traceur" />
+   <arg value="--reporter" />
+   <arg value="xunit" />
+  </exec>
+ </target>
+
+</project>
+

@@ -11,9 +11,14 @@
     "gulp-shell": "*",
 
     "traceur": "*",
+    "mocha": "*",
+    "mocha-traceur": "*",
+    "jscs": "*",
+    "selenium-webdriver": "*",
 
     "connect": "*",
     "serve-static": "*",
+    "morgan": "*",
 
     "node-inspector": "*"
   }

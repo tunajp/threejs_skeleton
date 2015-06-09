@@ -18,7 +18,7 @@ var uglify = require('gulp-uglify');
 // ServerSideCompile Task
 gulp.task('servercompile', function () {
   gulp.src(['src/**/*.js'])
-    .pipe(shell(['node node_modules/traceur/traceur --out tmp/server/app.compiled.js src/app.js']));
+    .pipe(shell(['node node_modules/traceur/traceur --experimental --out tmp/server/app.compiled.js src/app.js']));
 });
 
 // ServerSideConcat Task
@@ -31,7 +31,7 @@ gulp.task('serverconcat', function () {
 // ClientSideCompile Task
 gulp.task('clientjs', function () {
   gulp.src(['webroot/**/*.js'])
-    .pipe(shell(['node ../../../node_modules/traceur/traceur --out app.compiled.js app.js'],{cwd: 'webroot/js/app', }));
+    .pipe(shell(['node ../../../node_modules/traceur/traceur --experimental --out app.compiled.js app.js'],{cwd: 'webroot/js/app', }));
 });
 
 // ClientSideCompress Task

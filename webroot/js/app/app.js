@@ -2,147 +2,169 @@
  * app.js
  *
  * @author Mitsunori Inaba <m-inaba@phoenixdesign.jp>
+ * Copyright(C) 2015 DesignStudioPhoenix Corporation. All Rights Reserved.
  */
 
+import * as PXConfig from "./config.js";
+import * as PXUtil from "./util.js";
+import * as PXLogger from "./logger.js";
 
-import * as PXUtil from './util.js';
-import * as PXConfig from './config.js';
-import * as PXScene from './testscene.js';
+import * as PXTestScene from "./scenes/testscene.js";
 
-/**
- * Application class
- */
-class Application
-{
+(function() {
+
   /**
-   * constructor
+   * Application class
    */
-  constructor()
+  class Application
   {
-    PXUtil.trace_func('App::constructor');
-
-    //
-    // private member
-    //
-    /** renderer */
-    this.renderer;
-    /** stats */
-    this.stats;
-    /** currentSceneObject */
-    this.currentSceneObject;
-
-    /*
-     * renderer
+    /**
+     * constructor
      */
-    this.renderer = Detector.webgl ? new THREE.WebGLRenderer({antialias: true}) : new THREE.CanvasRenderer();
-    if (Detector.webgl) {
-      PXUtil.webgl_info(this.renderer);
-    } else {
+    constructor()
+    {
+      /*
+       * debug board
+       */
+      if (PXConfig._DEBUG_MODE_) {
+        PXLogger.Logger.init(5);
+      }
+
+      PXUtil.Util.trace_func('Application::consturctor');
+      PXLogger.Logger.log('Application::consturctor');
+
+      //
+      // private members
+      //
+      /** renderer */
+      this.renderer;
+      /** stats */
+      this.stats;
+      /** currentSceneObject */
+      this.currentSceneObject;
+
+      /*
+       * renderer
+       */
+      if (Detector.webgl) {
+        this.renderer = new THREE.WebGLRenderer({antialias: true});
+        PXUtil.Util.trace_func('renderer->webgl');
+        PXLogger.Logger.log('renderer->webgl');
+        // display webgl info
+        let gl_info = PXUtil.Util.webglInfo(this.renderer);
+      } else {
+        this.renderer = new THREE.CanvasRenderer();
+        PXUtil.Util.trace_func('renderer->canvas');
+        PXLogger.Logger.log('renderer->canvas');
+      }
+      let wh = PXUtil.Util.getWH();
+      this.renderer.setSize(wh.width, wh.height);
+      this.renderer.setClearColor(0x000000, 1);
+      document.getElementById('canvas').appendChild(this.renderer.domElement);
+
+      /*
+       * set stats
+       */
+      if (PXConfig._DEBUG_MODE_) {
+        this.stats = new Stats();
+        this.stats.domElement.style.position = 'absolute';
+        this.stats.domElement.style.top = '0px';
+        this.stats.domElement.style.zIndex = 100;
+        document.body.appendChild(this.stats.domElement);
+      }
+
+      /*
+       * scene
+       */
+      this.currentSceneObject = new PXTestScene.TestScene(this.renderer);
+
+      /*
+       * register event handler
+       */
+      this.resize();
     }
-    var width = window.innerWidth;
-    var height = window.innerHeight;
-    this.renderer.setSize(width, height);
-    this.renderer.setClearColor(0x00000, 1);
-    document.getElementById('canvas').appendChild(this.renderer.domElement);
 
-    /*
-     * set stats
+    /**
+     * run method
      */
-    this.stats = new Stats();
-    this.stats.domElement.style.position = 'absolute';
-    this.stats.domElement.style.top = '0px';
-    this.stats.domElement.style.zIndex = 100;
-    document.body.appendChild(this.stats.domElement);
+    run()
+    {
+      PXUtil.Util.trace_func('Application::run');
+      PXLogger.Logger.log('Application::run');
 
-    /*
-     * debug_board
-     */
-    if (PXConfig._DEBUG_MODE_) {
-      document.body.appendChild(this.stats.domElement);
-      $(document.body).append('<div id="debug_board" width="200" height="200">test<br>test2<br>test3<br></div');
+      PXLogger.Logger.log('HOGE!!!');
+      //PXLogger.Logger.clear();
+
+      PXUtil.Util.createDebugBoard();
+      PXUtil.Util.debug('debug');
+
+      this.update();
     }
 
-    /*
-     * scene作成
-     */
-    this.currentSceneObject = new PXScene.TestScene(this.renderer);
+    update()
+    {
+      this.rendering();
 
-    /*
-     * eventハンドラ登録
-     */
-    this.resize();
-  }
-  /**
-   * run method
-   */
-  run()
-  {
-    PXUtil.trace_func('App::run');
+      if (PXConfig._DEBUG_MODE_) {
+        this.stats.update();
+      }
+    }
 
-    this.update();
-  }
-  /**
-   * update method
-   */
-  update()
-  {
-    this.rendering();
-    
-    // レンダリングするたびにFPSを計測
-    this.stats.update();
-  }
-  /**
-   * rendering method
-   */
-  rendering()
-  {
-    if (PXConfig._FPS_ === 60) {
-      requestAnimationFrame( () => {
-        this.update();
-      });
-    } else {
-      setTimeout( () => {
-        requestAnimationFrame( () => {
+    rendering()
+    {
+      if (PXConfig._FPS_ === 60) {
+        requestAnimationFrame(() => {
           this.update();
         });
-      }, 1000/PXConfig._FPS_);
+      } else {
+        setTimeout(() => {
+          requestAnimationFrame(() => {
+            this.update();
+          });
+        }, 1000 / PXConfig._FPS_);
+      }
+
+      if (this.currentSceneObject.loadingStatus.status === 'loaded') {
+        this.currentSceneObject.rendering();
+      }
     }
 
-    if (this.currentSceneObject.getLoadingStatus() === true) {
-      this.currentSceneObject.rendering();
-    }
-  }
-  /**
-   * resize method
-   */
-  resize()
-  {
-    PXUtil.trace_func('App::resize');
-
-    $(window).resize( (e) => {
-      var w = window.innerWidth;
-      var h = window.innerHeight;
-      PXUtil.trace_func('App::resize::resize w:' + w + ',h:' + h + ",e:" + e);
-
-      this.renderer.setSize(w, h);
-      this.currentSceneObject.resize();
-    });
-  }
-}
-
-/*
- * entry point
- */
-$( () => {
-  /*
-   * i18n init
-   */
-  PXUtil.i18nLoad( () => {
-    PXUtil.trace_func($.i18n.t('app.i18nLoadComplete'));
-    /*
-     * application start
+    /**
+     * resize method
      */
-    var app = new Application();
-    app.run();
-  });
-});
+    resize()
+    {
+      window.addEventListener('resize', (event) => {
+        let wh = PXUtil.Util.getWH();
+        PXLogger.Logger.log('Application::resize w:' + wh.width + ',h:' + wh.height + ',e:' + event);
+
+        this.renderer.setSize(wh.width, wh.height);
+        this.currentSceneObject.resize();
+      }, false);
+    }
+  }
+
+  /*
+   * entry point
+   * support browser:
+   *   Chrome:0.2+
+   *   Firefox:1.0+
+   *   IE:9.0+
+   *   Safari:3.1+
+   */
+  if (document.addEventListener) {
+    document.addEventListener("DOMContentLoaded", () => {
+      PXUtil.Util.i18nLoad(()=>{
+        PXUtil.Util.trace_func(i18n.t('app.i18nLoadComplete'));
+        /*
+         * application start
+         */
+        let app = new Application();
+        app.run();
+      });
+    }, false);
+  } else {
+    alert('Sorry. Not supported browser...');
+  }
+
+}());

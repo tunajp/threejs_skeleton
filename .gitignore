@@ -6,3 +6,6 @@ webroot/css/style.min.css.map
 tmp/.sass-cache
 tmp/server/
 tmp/client/
+tmp/*.png
+.tmp/
+*.log

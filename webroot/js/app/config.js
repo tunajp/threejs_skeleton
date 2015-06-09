@@ -6,7 +6,7 @@
 
 /** DEBUG */
 export var _DEBUG_MODE_ = true;
-/** FPS(60‚Ìê‡§–ñ‚ð‚©‚¯‚È‚¢A‚»‚Ìê‡ƒXƒs[ƒhŠ´‚ª‚à‚Á‚³‚è‚·‚éŽ–‚ª‚ ‚é) */
+/** FPS(60ã®å ´åˆåˆ¶ç´„ã‚’ã‹ã‘ãªã„ã€ãã®å ´åˆã‚¹ãƒ”ãƒ¼ãƒ‰æ„ŸãŒã‚‚ã£ã•ã‚Šã™ã‚‹äº‹ãŒã‚ã‚‹) */
 export var _FPS_ = 60;
 /** assets path */
 export var _ASSETS_PATH_ = "js/app/assets/";

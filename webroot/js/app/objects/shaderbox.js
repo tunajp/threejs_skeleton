@@ -17,7 +17,7 @@ export class Shaderbox
    */
   constructor(myVertexShader1, myFragmentShader1, callback_function)
   {
-    PXUtil.trace_func('Shaderbox::constructor');
+    PXUtil.Util.trace_func('Shaderbox::constructor');
 
     this.callback_function = callback_function;
 
@@ -80,4 +80,3 @@ export class Shaderbox
     this.customUniforms.time.value += delta;
   }
 }
-
