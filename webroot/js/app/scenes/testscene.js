@@ -10,8 +10,10 @@ import * as PXUtil from '../util.js';
 import * as PXLogger from '../logger.js';
 import * as PXIScene from '../iscene.js';
 import * as PXDebugbox from '../objects/debugbox.js';
+import * as PXVideobox from '../objects/videobox.js';
 import * as PXShaderLoader from "../shaderloader.js";
 import * as PXShaderbox from '../objects/shaderbox.js';
+import * as PXDebugfloor from '../objects/debugfloor.js';
 
 /**
  * TestScene class
@@ -83,6 +85,20 @@ export class TestScene extends PXIScene.IScene
       this.loadedIncrements();
     });
     this.render_target_array.push(debugbox);
+
+    var videobox = new PXVideobox.Videobox((mesh) => {
+      mesh.position.y += 70;
+      mesh.position.x += 240;
+      this.scene.add(mesh);
+      this.loadedIncrements();
+    });
+    this.render_target_array.push(videobox);
+
+    var debugfloor = new PXDebugfloor.Debugfloor((mesh) => {
+      this.scene.add(mesh);
+      this.loadedIncrements();
+    });
+    this.render_target_array.push(debugfloor);
 
     let vshader = new PXShaderLoader.ShaderLoader();
     let fshader = new PXShaderLoader.ShaderLoader();

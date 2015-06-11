@@ -46,9 +46,11 @@ export class IScene
     PXUtil.Util.trace_func('IScene::loadedIncrements');
     this.loadingStatus.loadedItems++;
     if (this.loadingStatus.loadedItems >= this.loadingStatus.allItems) {
-      this.loadingStatus.status = "loaded";
-      // ロード完了のこのタイミングでタイマーを開始
-      this.clock = new THREE.Clock();
+      if (this.loadingStatus.status != "loaded") {
+        this.loadingStatus.status = "loaded";
+        // ロード完了のこのタイミングでタイマーを開始
+        this.clock = new THREE.Clock();
+      }
     }
   }
 

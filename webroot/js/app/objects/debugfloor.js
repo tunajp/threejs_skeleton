@@ -22,7 +22,7 @@ export class Debugfloor
     this.callback_function = callback_function;
 
     this.mesh = new THREE.Mesh(
-      new THREE.PlaneGeometry(1000, 1000),
+      new THREE.PlaneBufferGeometry(1000, 1000),
       new THREE.MeshPhongMaterial({
         color: 0xe0e0e0,
         //side: THREE.DoubleSide

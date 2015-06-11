@@ -224,8 +224,10 @@ System.registerModule("iscene.js", [], function(require) {
           PXUtil.Util.trace_func('IScene::loadedIncrements');
           this.loadingStatus.loadedItems++;
           if (this.loadingStatus.loadedItems >= this.loadingStatus.allItems) {
-            this.loadingStatus.status = "loaded";
-            this.clock = new THREE.Clock();
+            if (this.loadingStatus.status != "loaded") {
+              this.loadingStatus.status = "loaded";
+              this.clock = new THREE.Clock();
+            }
           }
         },
         rendering: function() {
@@ -281,6 +283,34 @@ System.registerModule("objects/debugbox.js", [], function(require) {
   return ($__1 = {}, Object.defineProperty($__1, "Debugbox", {
     get: function() {
       return Debugbox;
+    },
+    configurable: true,
+    enumerable: true
+  }), $__1);
+});
+$traceurRuntime.options.symbols = true;
+System.registerModule("objects/debugfloor.js", [], function(require) {
+  "use strict";
+  var $__1;
+  var __moduleName = "objects/debugfloor.js";
+  var PXUtil = System.get("util.js");
+  var PXConfig = System.get("config.js");
+  var Debugfloor = $traceurRuntime.initTailRecursiveFunction(function() {
+    return $traceurRuntime.call(function() {
+      function Debugfloor(callback_function) {
+        PXUtil.Util.trace_func('Debugfloor::constructor');
+        this.callback_function = callback_function;
+        this.mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(1000, 1000), new THREE.MeshPhongMaterial({color: 0xe0e0e0}));
+        this.mesh.rotation.x = Math.PI + Math.PI / 2;
+        this.mesh.receiveShadow = true;
+        this.callback_function(this.mesh);
+      }
+      return $traceurRuntime.continuation($traceurRuntime.createClass, $traceurRuntime, [Debugfloor, {rendering: function(delta) {}}, {}]);
+    }, this, arguments);
+  })();
+  return ($__1 = {}, Object.defineProperty($__1, "Debugfloor", {
+    get: function() {
+      return Debugfloor;
     },
     configurable: true,
     enumerable: true
@@ -389,6 +419,97 @@ System.registerModule("shaderloader.js", [], function(require) {
   }), $__1);
 });
 $traceurRuntime.options.symbols = true;
+System.registerModule("objects/videobox.js", [], function(require) {
+  "use strict";
+  var $__2;
+  var __moduleName = "objects/videobox.js";
+  var PXConfig = System.get("config.js");
+  var PXUtil = System.get("util.js");
+  var PXShaderLoader = System.get("shaderloader.js");
+  var Videobox = $traceurRuntime.initTailRecursiveFunction(function() {
+    return $traceurRuntime.call(function() {
+      function Videobox(callback_function) {
+        var $__0 = this;
+        PXUtil.Util.trace_func('videobox::constructor');
+        this.video = document.createElement('video');
+        this.video.loop = true;
+        this.video.src = PXConfig._ASSETS_PATH_ + "small.ogv";
+        this.video.load();
+        this.video.play();
+        this.videoImage = document.createElement('canvas');
+        this.videoImage.width = 480;
+        this.videoImage.height = 204;
+        this.videoImageContext = this.videoImage.getContext('2d');
+        this.videoImageContext.fillStyle = "#000000";
+        this.videoImageContext.fillRect(0, 0, this.videoImage.width, this.videoImage.height);
+        this.videoTexture = new THREE.Texture(this.videoImage);
+        this.videoTexture.minFilter = THREE.LinearFilter;
+        this.videoTexture.magFilter = THREE.LinearFilter;
+        var vshader = new PXShaderLoader.ShaderLoader();
+        var fshader = new PXShaderLoader.ShaderLoader();
+        vshader.getXHR2('js/app/assets/shader/vertex.fx', function(vshader) {
+          console.log('vshader comp!');
+          fshader.getXHR2('js/app/assets/shader/fragment.fx', function(fshader) {
+            console.log('fshader comp!');
+            var sepia = false;
+            var sepia_value = false;
+            var grayscale_value = false;
+            if (sepia === true) {
+              sepia_value = true;
+            } else {
+              grayscale_value = true;
+            }
+            $__0.customUniforms = {
+              baseTexture: {
+                type: "t",
+                value: $__0.videoTexture
+              },
+              time: {
+                type: "f",
+                value: 1.0
+              },
+              grayscale: {
+                type: "i",
+                value: grayscale_value
+              },
+              sepia: {
+                type: "i",
+                value: sepia_value
+              }
+            };
+            var customMaterial = new THREE.ShaderMaterial({
+              uniforms: $__0.customUniforms,
+              vertexShader: vshader,
+              fragmentShader: fshader
+            });
+            $__0.mesh = new THREE.Mesh(new THREE.BoxGeometry(100, 100, 100), customMaterial);
+            callback_function($__0.mesh);
+          });
+        });
+      }
+      return $traceurRuntime.continuation($traceurRuntime.createClass, $traceurRuntime, [Videobox, {rendering: function(delta) {
+          if (this.mesh == null) {
+            return;
+          }
+          this.mesh.rotation.y += delta;
+          if (this.video.readyState === this.video.HAVE_ENOUGH_DATA) {
+            this.videoImageContext.drawImage(this.video, 0, 0);
+            if (this.videoTexture) {
+              this.videoTexture.needsUpdate = true;
+            }
+          }
+        }}, {}]);
+    }, this, arguments);
+  })();
+  return ($__2 = {}, Object.defineProperty($__2, "Videobox", {
+    get: function() {
+      return Videobox;
+    },
+    configurable: true,
+    enumerable: true
+  }), $__2);
+});
+$traceurRuntime.options.symbols = true;
 System.registerModule("scenes/testscene.js", [], function(require) {
   "use strict";
   var $__2;
@@ -398,8 +519,10 @@ System.registerModule("scenes/testscene.js", [], function(require) {
   var PXLogger = System.get("logger.js");
   var PXIScene = System.get("iscene.js");
   var PXDebugbox = System.get("objects/debugbox.js");
+  var PXVideobox = System.get("objects/videobox.js");
   var PXShaderLoader = System.get("shaderloader.js");
   var PXShaderbox = System.get("objects/shaderbox.js");
+  var PXDebugfloor = System.get("objects/debugfloor.js");
   var TestScene = $traceurRuntime.initTailRecursiveFunction(function($__super) {
     return $traceurRuntime.call(function($__super) {
       function TestScene(renderer) {
@@ -434,6 +557,18 @@ System.registerModule("scenes/testscene.js", [], function(require) {
             $__0.loadedIncrements();
           });
           this.render_target_array.push(debugbox);
+          var videobox = new PXVideobox.Videobox(function(mesh) {
+            mesh.position.y += 70;
+            mesh.position.x += 240;
+            $__0.scene.add(mesh);
+            $__0.loadedIncrements();
+          });
+          this.render_target_array.push(videobox);
+          var debugfloor = new PXDebugfloor.Debugfloor(function(mesh) {
+            $__0.scene.add(mesh);
+            $__0.loadedIncrements();
+          });
+          this.render_target_array.push(debugfloor);
           var vshader = new PXShaderLoader.ShaderLoader();
           var fshader = new PXShaderLoader.ShaderLoader();
           vshader.getXHR2('js/app/assets/shader/vertex.fx', function(vshader) {
