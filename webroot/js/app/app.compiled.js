@@ -449,16 +449,8 @@ System.registerModule("objects/videobox.js", [], function(require) {
         var fshader = new PXShaderLoader.ShaderLoader();
         vshader.getXHR2('js/app/assets/shader/vertex.fx', function(vshader) {
           console.log('vshader comp!');
-          fshader.getXHR2('js/app/assets/shader/fragment.fx', function(fshader) {
+          fshader.getXHR2('js/app/assets/shader/mosaic_fragment.fx', function(fshader) {
             console.log('fshader comp!');
-            var sepia = false;
-            var sepia_value = false;
-            var grayscale_value = false;
-            if (sepia === true) {
-              sepia_value = true;
-            } else {
-              grayscale_value = true;
-            }
             $__0.customUniforms = {
               baseTexture: {
                 type: "t",
@@ -468,13 +460,13 @@ System.registerModule("objects/videobox.js", [], function(require) {
                 type: "f",
                 value: 1.0
               },
-              grayscale: {
-                type: "i",
-                value: grayscale_value
+              vScreenSize: {
+                type: "v2",
+                value: new THREE.Vector2(480.0, 320.0)
               },
-              sepia: {
-                type: "i",
-                value: sepia_value
+              fMosaicScale: {
+                type: "f",
+                value: 10.0
               }
             };
             var customMaterial = new THREE.ShaderMaterial({

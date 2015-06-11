@@ -45,22 +45,14 @@ export class Videobox
     let fshader = new PXShaderLoader.ShaderLoader();
     vshader.getXHR2('js/app/assets/shader/vertex.fx', (vshader) => {
       console.log('vshader comp!');
-      fshader.getXHR2('js/app/assets/shader/fragment.fx', (fshader) => {
+      fshader.getXHR2('js/app/assets/shader/mosaic_fragment.fx', (fshader) => {
         console.log('fshader comp!');
 
-        var sepia = false;
-        var sepia_value = false;
-        var grayscale_value = false;
-        if (sepia === true) {
-          sepia_value = true;
-        } else {
-          grayscale_value = true;
-        }
         this.customUniforms ={
           baseTexture: { type: "t", value:this.videoTexture},
           time: { type: "f", value: 1.0 },
-          grayscale: { type: "i", value:grayscale_value},
-          sepia: { type: "i", value:sepia_value}
+          vScreenSize: { type: "v2", value:new THREE.Vector2(480.0, 320.0)},
+          fMosaicScale: { type: "f", value:10.0}
         };
         var customMaterial = new THREE.ShaderMaterial({
           uniforms: this.customUniforms,
