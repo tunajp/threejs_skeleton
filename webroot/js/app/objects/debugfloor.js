@@ -4,8 +4,7 @@
  * @author Mitsunori Inaba <m-inaba@phoenixdesign.jp>
  */
 
-import * as PXUtil from '../util.js';
-import * as PXConfig from '../config.js';
+import * as PXUtil from '../../libs/tunajp/util.js';
 
 /**
  * Debugfloor class

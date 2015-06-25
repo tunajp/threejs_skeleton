@@ -1,37 +1,8 @@
 $traceurRuntime.options.symbols = true;
-System.registerModule("config.js", [], function(require) {
-  "use strict";
-  var $__0;
-  var __moduleName = "config.js";
-  var _DEBUG_MODE_ = true;
-  var _FPS_ = 60;
-  var _ASSETS_PATH_ = "js/app/assets/";
-  return ($__0 = {}, Object.defineProperty($__0, "_DEBUG_MODE_", {
-    get: function() {
-      return _DEBUG_MODE_;
-    },
-    configurable: true,
-    enumerable: true
-  }), Object.defineProperty($__0, "_FPS_", {
-    get: function() {
-      return _FPS_;
-    },
-    configurable: true,
-    enumerable: true
-  }), Object.defineProperty($__0, "_ASSETS_PATH_", {
-    get: function() {
-      return _ASSETS_PATH_;
-    },
-    configurable: true,
-    enumerable: true
-  }), $__0);
-});
-$traceurRuntime.options.symbols = true;
-System.registerModule("util.js", [], function(require) {
+System.registerModule("../libs/tunajp/util.js", [], function(require) {
   "use strict";
   var $__1;
-  var __moduleName = "util.js";
-  var PXConfig = System.get("config.js");
+  var __moduleName = "../libs/tunajp/util.js";
   var Util = $traceurRuntime.initTailRecursiveFunction(function() {
     return $traceurRuntime.call(function() {
       var $__2,
@@ -40,20 +11,20 @@ System.registerModule("util.js", [], function(require) {
       function Util() {}
       return $traceurRuntime.continuation($traceurRuntime.createClass, $traceurRuntime, [Util, {}, {
         trace_func: function(str) {
-          if (PXConfig._DEBUG_MODE_) {
+          if (_DEBUG_MODE_) {
             var log_time = this.getCurrentTimeString();
             console.log(log_time + " " + str);
           }
         },
         createDebugBoard: function() {
-          if (PXConfig._DEBUG_MODE_) {
+          if (_DEBUG_MODE_) {
             this.domElement = document.createElement('div');
             this.domElement.id = 'debug_board';
             document.body.appendChild(this.domElement);
           }
         },
         debug: function(str) {
-          if (PXConfig._DEBUG_MODE_) {
+          if (_DEBUG_MODE_) {
             var log_time = this.getCurrentTimeString();
             document.querySelector('#debug_board').innerHTML = log_time + " " + str;
           }
@@ -153,11 +124,11 @@ System.registerModule("util.js", [], function(require) {
   }), $__1);
 });
 $traceurRuntime.options.symbols = true;
-System.registerModule("logger.js", [], function(require) {
+System.registerModule("../libs/tunajp/logger.js", [], function(require) {
   "use strict";
   var $__1;
-  var __moduleName = "logger.js";
-  var PXUtil = System.get("util.js");
+  var __moduleName = "../libs/tunajp/logger.js";
+  var PXUtil = System.get("../libs/tunajp/util.js");
   var Logger = $traceurRuntime.initTailRecursiveFunction(function() {
     return $traceurRuntime.call(function() {
       function Logger() {}
@@ -201,13 +172,12 @@ System.registerModule("logger.js", [], function(require) {
   }), $__1);
 });
 $traceurRuntime.options.symbols = true;
-System.registerModule("iscene.js", [], function(require) {
+System.registerModule("../libs/tunajp/iscene.js", [], function(require) {
   "use strict";
   var $__1;
-  var __moduleName = "iscene.js";
-  var PXConfig = System.get("config.js");
-  var PXUtil = System.get("util.js");
-  var PXLogger = System.get("logger.js");
+  var __moduleName = "../libs/tunajp/iscene.js";
+  var PXUtil = System.get("../libs/tunajp/util.js");
+  var PXLogger = System.get("../libs/tunajp/logger.js");
   var IScene = $traceurRuntime.initTailRecursiveFunction(function() {
     return $traceurRuntime.call(function() {
       function IScene(renderer) {
@@ -267,12 +237,50 @@ System.registerModule("iscene.js", [], function(require) {
   }), $__1);
 });
 $traceurRuntime.options.symbols = true;
+System.registerModule("../libs/tunajp/shaderloader.js", [], function(require) {
+  "use strict";
+  var $__1;
+  var __moduleName = "../libs/tunajp/shaderloader.js";
+  var PXUtil = System.get("../libs/tunajp/util.js");
+  var ShaderLoader = $traceurRuntime.initTailRecursiveFunction(function() {
+    return $traceurRuntime.call(function() {
+      function ShaderLoader() {
+        console.log('ShaderLoader::constructor');
+      }
+      return $traceurRuntime.continuation($traceurRuntime.createClass, $traceurRuntime, [ShaderLoader, {getXHR2: function(url, cb) {
+          var xhr = new XMLHttpRequest();
+          xhr.open("GET", url);
+          xhr.onload = function() {
+            if (this.status === 200) {} else if (this.status === 404) {
+              console.log('404 not found: ' + url);
+            } else {
+              console.log('other xhr error: ' + url);
+            }
+            cb(this.response);
+          };
+          xhr.timeout = 10000;
+          xhr.ontimeout = function() {
+            console.log('timeout: ' + url);
+            cb(this.response);
+          };
+          xhr.send(null);
+        }}, {}]);
+    }, this, arguments);
+  })();
+  return ($__1 = {}, Object.defineProperty($__1, "ShaderLoader", {
+    get: function() {
+      return ShaderLoader;
+    },
+    configurable: true,
+    enumerable: true
+  }), $__1);
+});
+$traceurRuntime.options.symbols = true;
 System.registerModule("objects/debugbox.js", [], function(require) {
   "use strict";
   var $__1;
   var __moduleName = "objects/debugbox.js";
-  var PXConfig = System.get("config.js");
-  var PXUtil = System.get("util.js");
+  var PXUtil = System.get("../libs/tunajp/util.js");
   var Debugbox = $traceurRuntime.initTailRecursiveFunction(function() {
     return $traceurRuntime.call(function() {
       function Debugbox(callback_function) {
@@ -301,8 +309,7 @@ System.registerModule("objects/debugfloor.js", [], function(require) {
   "use strict";
   var $__1;
   var __moduleName = "objects/debugfloor.js";
-  var PXUtil = System.get("util.js");
-  var PXConfig = System.get("config.js");
+  var PXUtil = System.get("../libs/tunajp/util.js");
   var Debugfloor = $traceurRuntime.initTailRecursiveFunction(function() {
     return $traceurRuntime.call(function() {
       function Debugfloor(callback_function) {
@@ -329,14 +336,13 @@ System.registerModule("objects/shaderbox.js", [], function(require) {
   "use strict";
   var $__1;
   var __moduleName = "objects/shaderbox.js";
-  var PXUtil = System.get("util.js");
-  var PXConfig = System.get("config.js");
+  var PXUtil = System.get("../libs/tunajp/util.js");
   var Shaderbox = $traceurRuntime.initTailRecursiveFunction(function() {
     return $traceurRuntime.call(function() {
       function Shaderbox(myVertexShader1, myFragmentShader1, callback_function) {
         PXUtil.Util.trace_func('Shaderbox::constructor');
         this.callback_function = callback_function;
-        var baseTexture = new THREE.ImageUtils.loadTexture(PXConfig._ASSETS_PATH_ + 'Three.js-code-example.jpg');
+        var baseTexture = new THREE.ImageUtils.loadTexture(_ASSETS_PATH_ + 'Three.js-code-example.jpg');
         var sepia = true;
         var sepia_value = false;
         var grayscale_value = false;
@@ -388,52 +394,12 @@ System.registerModule("objects/shaderbox.js", [], function(require) {
   }), $__1);
 });
 $traceurRuntime.options.symbols = true;
-System.registerModule("shaderloader.js", [], function(require) {
-  "use strict";
-  var $__1;
-  var __moduleName = "shaderloader.js";
-  var PXUtil = System.get("util.js");
-  var ShaderLoader = $traceurRuntime.initTailRecursiveFunction(function() {
-    return $traceurRuntime.call(function() {
-      function ShaderLoader() {
-        console.log('ShaderLoader::constructor');
-      }
-      return $traceurRuntime.continuation($traceurRuntime.createClass, $traceurRuntime, [ShaderLoader, {getXHR2: function(url, cb) {
-          var xhr = new XMLHttpRequest();
-          xhr.open("GET", url);
-          xhr.onload = function() {
-            if (this.status === 200) {} else if (this.status === 404) {
-              console.log('404 not found: ' + url);
-            } else {
-              console.log('other xhr error: ' + url);
-            }
-            cb(this.response);
-          };
-          xhr.timeout = 10000;
-          xhr.ontimeout = function() {
-            console.log('timeout: ' + url);
-            cb(this.response);
-          };
-          xhr.send(null);
-        }}, {}]);
-    }, this, arguments);
-  })();
-  return ($__1 = {}, Object.defineProperty($__1, "ShaderLoader", {
-    get: function() {
-      return ShaderLoader;
-    },
-    configurable: true,
-    enumerable: true
-  }), $__1);
-});
-$traceurRuntime.options.symbols = true;
 System.registerModule("objects/videobox.js", [], function(require) {
   "use strict";
   var $__2;
   var __moduleName = "objects/videobox.js";
-  var PXConfig = System.get("config.js");
-  var PXUtil = System.get("util.js");
-  var PXShaderLoader = System.get("shaderloader.js");
+  var PXUtil = System.get("../libs/tunajp/util.js");
+  var PXShaderLoader = System.get("../libs/tunajp/shaderloader.js");
   var Videobox = $traceurRuntime.initTailRecursiveFunction(function() {
     return $traceurRuntime.call(function() {
       function Videobox(callback_function) {
@@ -441,7 +407,7 @@ System.registerModule("objects/videobox.js", [], function(require) {
         PXUtil.Util.trace_func('videobox::constructor');
         this.video = document.createElement('video');
         this.video.loop = true;
-        this.video.src = PXConfig._ASSETS_PATH_ + "small.ogv";
+        this.video.src = _ASSETS_PATH_ + "small.ogv";
         this.video.load();
         this.video.play();
         this.videoImage = document.createElement('canvas');
@@ -514,13 +480,12 @@ System.registerModule("scenes/testscene.js", [], function(require) {
   "use strict";
   var $__2;
   var __moduleName = "scenes/testscene.js";
-  var PXConfig = System.get("config.js");
-  var PXUtil = System.get("util.js");
-  var PXLogger = System.get("logger.js");
-  var PXIScene = System.get("iscene.js");
+  var PXUtil = System.get("../libs/tunajp/util.js");
+  var PXLogger = System.get("../libs/tunajp/logger.js");
+  var PXIScene = System.get("../libs/tunajp/iscene.js");
   var PXDebugbox = System.get("objects/debugbox.js");
   var PXVideobox = System.get("objects/videobox.js");
-  var PXShaderLoader = System.get("shaderloader.js");
+  var PXShaderLoader = System.get("../libs/tunajp/shaderloader.js");
   var PXShaderbox = System.get("objects/shaderbox.js");
   var PXDebugfloor = System.get("objects/debugfloor.js");
   var TestScene = $traceurRuntime.initTailRecursiveFunction(function($__super) {
@@ -600,15 +565,14 @@ $traceurRuntime.options.symbols = true;
 System.registerModule("app.js", [], function(require) {
   "use strict";
   var __moduleName = "app.js";
-  var PXConfig = System.get("config.js");
-  var PXUtil = System.get("util.js");
-  var PXLogger = System.get("logger.js");
+  var PXUtil = System.get("../libs/tunajp/util.js");
+  var PXLogger = System.get("../libs/tunajp/logger.js");
   var PXTestScene = System.get("scenes/testscene.js");
   (function() {
     var Application = $traceurRuntime.initTailRecursiveFunction(function() {
       return $traceurRuntime.call(function() {
         function Application() {
-          if (PXConfig._DEBUG_MODE_) {
+          if (_DEBUG_MODE_) {
             PXLogger.Logger.init(5);
           }
           PXUtil.Util.trace_func('Application::consturctor');
@@ -630,7 +594,7 @@ System.registerModule("app.js", [], function(require) {
           this.renderer.setSize(wh.width, wh.height);
           this.renderer.setClearColor(0x000000, 1);
           document.getElementById('canvas').appendChild(this.renderer.domElement);
-          if (PXConfig._DEBUG_MODE_) {
+          if (_DEBUG_MODE_) {
             this.stats = new Stats();
             this.stats.domElement.style.position = 'absolute';
             this.stats.domElement.style.top = '0px';
@@ -651,13 +615,13 @@ System.registerModule("app.js", [], function(require) {
           },
           update: function() {
             this.rendering();
-            if (PXConfig._DEBUG_MODE_) {
+            if (_DEBUG_MODE_) {
               this.stats.update();
             }
           },
           rendering: function() {
             var $__0 = this;
-            if (PXConfig._FPS_ === 60) {
+            if (_FPS_ === 60) {
               requestAnimationFrame(function() {
                 $__0.update();
               });
@@ -666,7 +630,7 @@ System.registerModule("app.js", [], function(require) {
                 requestAnimationFrame(function() {
                   $__0.update();
                 });
-              }, 1000 / PXConfig._FPS_);
+              }, 1000 / _FPS_);
             }
             if (this.currentSceneObject.loadingStatus.status === 'loaded') {
               this.currentSceneObject.rendering();

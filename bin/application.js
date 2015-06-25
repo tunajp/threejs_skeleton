@@ -3502,10 +3502,10 @@ System.registerModule("traceur-runtime@0.0.90/src/runtime/polyfills/polyfills.js
 System.get("traceur-runtime@0.0.90/src/runtime/polyfills/polyfills.js" + '');
 
 $traceurRuntime.options.symbols = true;
-System.registerModule("../../webroot/js/app/config.js", [], function(require) {
+System.registerModule("../../src/config.js", [], function(require) {
   "use strict";
   var $__0;
-  var __moduleName = "../../webroot/js/app/config.js";
+  var __moduleName = "../../src/config.js";
   var _DEBUG_MODE_ = true;
   var _FPS_ = 60;
   var _ASSETS_PATH_ = "js/app/assets/";
@@ -3530,11 +3530,11 @@ System.registerModule("../../webroot/js/app/config.js", [], function(require) {
   }), $__0);
 });
 $traceurRuntime.options.symbols = true;
-System.registerModule("../../webroot/js/app/util.js", [], function(require) {
+System.registerModule("../../src/util.js", [], function(require) {
   "use strict";
   var $__1;
-  var __moduleName = "../../webroot/js/app/util.js";
-  var PXConfig = System.get("../../webroot/js/app/config.js");
+  var __moduleName = "../../src/util.js";
+  var PXConfig = System.get("../../src/config.js");
   var Util = $traceurRuntime.initTailRecursiveFunction(function() {
     return $traceurRuntime.call(function() {
       var $__2,
@@ -3659,8 +3659,8 @@ $traceurRuntime.options.symbols = true;
 System.registerModule("../../src/app.js", [], function(require) {
   "use strict";
   var __moduleName = "../../src/app.js";
-  var PXConfig = System.get("../../webroot/js/app/config.js");
-  var PXUtil = System.get("../../webroot/js/app/util.js");
+  var PXConfig = System.get("../../src/config.js");
+  var PXUtil = System.get("../../src/util.js");
   (function() {
     var Application = $traceurRuntime.initTailRecursiveFunction(function() {
       return $traceurRuntime.call(function() {

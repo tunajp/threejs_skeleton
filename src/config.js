@@ -5,8 +5,8 @@
  */
 
 /** DEBUG */
-var _DEBUG_MODE_ = true;
+export var _DEBUG_MODE_ = true;
 /** FPS(60の場合制約をかけない、その場合スピード感がもっさりする事がある) */
-var _FPS_ = 60;
+export var _FPS_ = 60;
 /** assets path */
-var _ASSETS_PATH_ = "js/app/assets/";
+export var _ASSETS_PATH_ = "js/app/assets/";

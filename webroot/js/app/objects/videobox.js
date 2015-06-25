@@ -5,9 +5,8 @@
  * @author Mitsunori Inaba <m-inaba@phoenixdesign.jp>
  */
 
-import * as PXConfig from '../config.js';
-import * as PXUtil from '../util.js';
-import * as PXShaderLoader from "../shaderloader.js";
+import * as PXUtil from '../../libs/tunajp/util.js';
+import * as PXShaderLoader from "../../libs/tunajp/shaderloader.js";
 
 /**
  * Videobox class
@@ -25,7 +24,7 @@ export class Videobox
 
     this.video = document.createElement('video');
     this.video.loop = true;
-    this.video.src = PXConfig._ASSETS_PATH_ + "small.ogv";
+    this.video.src = _ASSETS_PATH_ + "small.ogv";
     this.video.load();
     this.video.play();
 

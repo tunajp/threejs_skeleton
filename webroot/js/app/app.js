@@ -5,9 +5,8 @@
  * Copyright(C) 2015 DesignStudioPhoenix Corporation. All Rights Reserved.
  */
 
-import * as PXConfig from "./config.js";
-import * as PXUtil from "./util.js";
-import * as PXLogger from "./logger.js";
+import * as PXUtil from "../libs/tunajp/util.js";
+import * as PXLogger from "../libs/tunajp/logger.js";
 
 import * as PXTestScene from "./scenes/testscene.js";
 
@@ -26,7 +25,7 @@ import * as PXTestScene from "./scenes/testscene.js";
       /*
        * debug board
        */
-      if (PXConfig._DEBUG_MODE_) {
+      if (_DEBUG_MODE_) {
         PXLogger.Logger.init(5);
       }
 
@@ -65,7 +64,7 @@ import * as PXTestScene from "./scenes/testscene.js";
       /*
        * set stats
        */
-      if (PXConfig._DEBUG_MODE_) {
+      if (_DEBUG_MODE_) {
         this.stats = new Stats();
         this.stats.domElement.style.position = 'absolute';
         this.stats.domElement.style.top = '0px';
@@ -105,14 +104,14 @@ import * as PXTestScene from "./scenes/testscene.js";
     {
       this.rendering();
 
-      if (PXConfig._DEBUG_MODE_) {
+      if (_DEBUG_MODE_) {
         this.stats.update();
       }
     }
 
     rendering()
     {
-      if (PXConfig._FPS_ === 60) {
+      if (_FPS_ === 60) {
         requestAnimationFrame(() => {
           this.update();
         });
@@ -121,7 +120,7 @@ import * as PXTestScene from "./scenes/testscene.js";
           requestAnimationFrame(() => {
             this.update();
           });
-        }, 1000 / PXConfig._FPS_);
+        }, 1000 / _FPS_);
       }
 
       if (this.currentSceneObject.loadingStatus.status === 'loaded') {

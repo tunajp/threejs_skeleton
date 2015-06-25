@@ -5,8 +5,8 @@
  * Copyright(C) 2015 DesignStudioPhoenix Corporation. All Rights Reserved.
  */
 
-import * as PXConfig from '../webroot/js/app/config.js';
-import * as PXUtil from '../webroot/js/app/util.js';
+import * as PXConfig from './config.js';
+import * as PXUtil from './util.js';
 
 (function() {
 

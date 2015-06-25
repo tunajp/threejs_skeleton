@@ -5,13 +5,12 @@
  * Copyright(C) 2015 DesignStudioPhoenix Corporation. All Rights Reserved.
  */
 
-import * as PXConfig from '../config.js';
-import * as PXUtil from '../util.js';
-import * as PXLogger from '../logger.js';
-import * as PXIScene from '../iscene.js';
+import * as PXUtil from '../../libs/tunajp/util.js';
+import * as PXLogger from '../../libs/tunajp/logger.js';
+import * as PXIScene from '../../libs/tunajp/iscene.js';
 import * as PXDebugbox from '../objects/debugbox.js';
 import * as PXVideobox from '../objects/videobox.js';
-import * as PXShaderLoader from "../shaderloader.js";
+import * as PXShaderLoader from "../../libs/tunajp/shaderloader.js";
 import * as PXShaderbox from '../objects/shaderbox.js';
 import * as PXDebugfloor from '../objects/debugfloor.js';
 
