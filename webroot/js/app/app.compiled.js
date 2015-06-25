@@ -212,6 +212,7 @@ System.registerModule("iscene.js", [], function(require) {
     return $traceurRuntime.call(function() {
       function IScene(renderer) {
         this.renderer;
+        this._TEST_CONTROLLER_ = false;
         this.render_target_array = new Array();
         this.clock;
         this.loadingStatus = {};
@@ -220,6 +221,10 @@ System.registerModule("iscene.js", [], function(require) {
         this.loadingStatus.status = 'loading';
       }
       return $traceurRuntime.continuation($traceurRuntime.createClass, $traceurRuntime, [IScene, {
+        testController: function() {
+          this._TEST_CONTROLLER_ = true;
+          this.trackball = new THREE.TrackballControls(this.camera);
+        },
         loadedIncrements: function() {
           PXUtil.Util.trace_func('IScene::loadedIncrements');
           this.loadingStatus.loadedItems++;
@@ -231,6 +236,9 @@ System.registerModule("iscene.js", [], function(require) {
           }
         },
         rendering: function() {
+          if (this._TEST_CONTROLLER_) {
+            this.trackball.update();
+          }
           var delta = this.clock.getDelta();
           for (var i = 0; i < this.render_target_array.length; i++) {
             this.render_target_array[$traceurRuntime.toProperty(i)].rendering(delta);
@@ -540,6 +548,7 @@ System.registerModule("scenes/testscene.js", [], function(require) {
         this.ambient = new THREE.AmbientLight(0x333333);
         this.scene.add(this.ambient);
         this.loadObjects();
+        this.testController();
       }
       return $traceurRuntime.continuation($traceurRuntime.createClass, $traceurRuntime, [TestScene, {loadObjects: function() {
           var $__0 = this;

@@ -72,6 +72,7 @@ export class TestScene extends PXIScene.IScene
 
     this.loadObjects();
 
+    this.testController();
   }
 
   /**

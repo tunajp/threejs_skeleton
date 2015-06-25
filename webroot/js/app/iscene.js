@@ -27,6 +27,8 @@ export class IScene
     /** renderer */
     this.renderer;
 
+    this._TEST_CONTROLLER_ = false;
+
     /** rendering target array */
     this.render_target_array = new Array();
     /** clock */
@@ -36,6 +38,15 @@ export class IScene
     this.loadingStatus.allItems = 0;
     this.loadingStatus.loadedItems = 0;
     this.loadingStatus.status = 'loading';
+  }
+
+  /**
+   * testController
+   */
+  testController()
+  {
+    this._TEST_CONTROLLER_ = true;
+    this.trackball = new THREE.TrackballControls(this.camera);
   }
 
   /**
@@ -59,9 +70,9 @@ export class IScene
    */
   rendering()
   {
-    //if (_TEST_CONTROLLER_) {
-    //  this.trackball.update();
-    //}
+    if (this._TEST_CONTROLLER_) {
+      this.trackball.update();
+    }
 
     var delta = this.clock.getDelta();
 
